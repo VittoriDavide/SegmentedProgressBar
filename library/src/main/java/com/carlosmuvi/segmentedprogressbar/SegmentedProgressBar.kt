@@ -13,7 +13,7 @@ import android.view.View
  */
 
 class SegmentedProgressBar : View {
-
+  private var segmentCompletedListener: CompletedSegmentListener? = null
   private var lastCompletedSegment = 0
   private var currentSegmentProgressInPx = 0
 
@@ -51,6 +51,7 @@ class SegmentedProgressBar : View {
         lastCompletedSegment++
         currentSegmentProgressInPx = 0
       }
+      if (totalTicks == currentTicks) segmentCompletedListener?.onSegmentCompleted(lastCompletedSegment)
       invalidate()
     }
   }
@@ -77,6 +78,15 @@ class SegmentedProgressBar : View {
   fun setSegmentCount(segmentCount: Int) {
     properties.segmentCount = segmentCount
   }
+
+  /**
+   * Callback that will be triggered when a segment is filled.
+   */
+  @Suppress("Unused")
+  fun setCompletedSegmentListener(listener: CompletedSegmentListener) {
+    this.segmentCompletedListener = listener
+  }
+  
 
   /*
     EXPOSED ACTION METHODS
@@ -204,4 +214,9 @@ class SegmentedProgressBar : View {
 
   private val segmentWidth: Int
     get() = width / properties.segmentCount - properties.segmentGapWidth
+}
+
+
+interface CompletedSegmentListener {
+  fun onSegmentCompleted(segmentCount: Int)
 }
