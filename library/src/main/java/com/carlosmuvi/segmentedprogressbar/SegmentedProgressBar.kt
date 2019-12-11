@@ -1,5 +1,6 @@
 package com.carlosmuvi.segmentedprogressbar
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -43,6 +44,7 @@ class SegmentedProgressBar : View {
 
   private fun initDrawingTimer() {
     drawingTimer = DrawingTimer()
+
     drawingTimer.setListener { currentTicks, totalTicks ->
       val segmentWidth = segmentWidth
 
@@ -52,7 +54,9 @@ class SegmentedProgressBar : View {
         currentSegmentProgressInPx = 0
       }
       if (totalTicks == currentTicks) segmentCompletedListener?.onSegmentCompleted(lastCompletedSegment)
-      invalidate()
+      (context as Activity).runOnUiThread(java.lang.Runnable {
+        invalidate()
+      })
     }
   }
 
@@ -86,7 +90,7 @@ class SegmentedProgressBar : View {
   fun setCompletedSegmentListener(listener: CompletedSegmentListener) {
     this.segmentCompletedListener = listener
   }
-  
+
 
   /*
     EXPOSED ACTION METHODS
