@@ -14,7 +14,7 @@ public class DrawingTimer {
     private final Handler handler;
     private final HandlerThread handlerThread;
 
-    private final long tickTimeInMilliseconds = 30;
+    private final long tickTimeInMilliseconds = 200;
     private int totalTicks;
     private int currentTick = 0;
     private Listener listener;
