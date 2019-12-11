@@ -1,6 +1,9 @@
 package com.carlosmuvi.segmentedprogressbar;
 
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.util.Log;
 
 /**
  * Created by carlosmuvi on 02/09/16.
@@ -9,6 +12,8 @@ import android.os.Handler;
 public class DrawingTimer {
 
     private final Handler handler;
+    private final HandlerThread handlerThread;
+
     private final long tickTimeInMilliseconds = 30;
     private int totalTicks;
     private int currentTick = 0;
@@ -16,7 +21,10 @@ public class DrawingTimer {
     private TimerState timerState = TimerState.IDLE;
 
     public DrawingTimer() {
-        handler = new Handler();
+        handlerThread = new HandlerThread("TickerHandler");
+        handlerThread.start();
+        Looper looper = handlerThread.getLooper();
+        handler = new Handler(looper);
     }
 
     public void start(long timeInMilliseconds) {
